@@ -2,16 +2,19 @@ from __future__ import annotations
 
 from argparse import ArgumentParser
 from pathlib import Path
+import os
 
 import joblib
 import matplotlib.pyplot as plt
 import numpy as np
-import tensorflow as tf
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
+
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
+import tensorflow as tf
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
@@ -35,7 +38,8 @@ def train_neural_network(
 ) -> tuple[tf.keras.Model, tf.keras.callbacks.History]:
     model = tf.keras.Sequential(
         [
-            tf.keras.layers.Dense(num_nodes, activation="relu", input_shape=(10,)),
+            tf.keras.layers.Input(shape=(10,)),
+            tf.keras.layers.Dense(num_nodes, activation="relu"),
             tf.keras.layers.Dropout(dropout_prob),
             tf.keras.layers.Dense(num_nodes, activation="relu"),
             tf.keras.layers.Dropout(dropout_prob),

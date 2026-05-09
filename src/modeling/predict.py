@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from argparse import ArgumentParser
 from pathlib import Path
+import os
 
 import numpy as np
+
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 import tensorflow as tf
 
 
@@ -18,7 +21,7 @@ def predict(limit: int) -> None:
     test = np.load(PROCESSED_DIR / "test.npy")
     X_test, y_test = test[:, :-1], test[:, -1]
 
-    probabilities = model.predict(X_test).flatten()
+    probabilities = model.predict(X_test, verbose=0).flatten()
     y_pred = np.where(probabilities > 0.5, "gamma", "hadron")
     y_true = np.where(y_test == 1, "gamma", "hadron")
 
